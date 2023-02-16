@@ -12,6 +12,8 @@ repository = "https://github.com/spdkit/spdkit"
 [dependencies]
 gut = { version = "0.4", package = "gchemol-gut" }
 gchemol = { version = "0.1", features = ["adhoc"] }
+vecfx = { version = "0.1", features = ["nalgebra"] }
+rand = "0.8"
 
 [features]
 # for adhoc hacking

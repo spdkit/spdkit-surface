@@ -3,15 +3,17 @@
 // 9f37ec34 ends here
 
 // [[file:../spdkit-surface.note::25d94f14][25d94f14]]
-mod probe;
+pub mod probe;
+mod sample;
 
 mod common {
+    pub use gchemol::prelude::*;
     pub use gchemol::Molecule;
     pub use gut::prelude::*;
 }
 // 25d94f14 ends here
 
-// [[file:../spdkit-surface.note::*docs][docs:1]]
+// [[file:../spdkit-surface.note::af95d88e][af95d88e]]
 #[cfg(feature = "adhoc")]
 /// Docs for local mods
 pub mod docs {
@@ -23,6 +25,6 @@ pub mod docs {
         };
     }
 
-    // export_doc!(codec);
+    export_doc!(probe);
 }
-// docs:1 ends here
+// af95d88e ends here
