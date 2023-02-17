@@ -4,7 +4,7 @@
 
 // [[file:../spdkit-surface.note::25d94f14][25d94f14]]
 pub mod probe;
-mod sample;
+pub mod sample;
 
 mod common {
     pub use gchemol::prelude::*;

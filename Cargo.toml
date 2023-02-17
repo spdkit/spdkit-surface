@@ -1,7 +1,7 @@
 # [[file:spdkit-surface.note::e345323a][e345323a]]
 [package]
 name = "spdkit-surface"
-version = "0.0.1"
+version = "0.1.1"
 edition = "2021"
 authors = ["Wenping Guo <ybyygu@gmail.com>"]
 description = "short text for crates.io"
