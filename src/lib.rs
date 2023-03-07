@@ -27,6 +27,8 @@ pub mod docs {
     }
 
     export_doc!(probe);
+    export_doc!(layers);
+    export_doc!(sample);
 }
 // af95d88e ends here
 
