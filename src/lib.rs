@@ -6,6 +6,7 @@
 pub mod probe;
 pub mod sample;
 
+mod layers;
 mod common {
     pub use gchemol::prelude::*;
     pub use gchemol::Molecule;
