@@ -29,3 +29,7 @@ pub mod docs {
     export_doc!(probe);
 }
 // af95d88e ends here
+
+// [[file:../spdkit-surface.note::027f4836][027f4836]]
+pub use crate::layers::fragment_atoms_by_layer;
+// 027f4836 ends here

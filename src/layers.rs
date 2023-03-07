@@ -18,11 +18,26 @@ fn contains_atom(mol: &Molecule, i: usize) -> bool {
 }
 
 #[track_caller]
-fn fragment_atoms_by_layer(mol: &mut Molecule) -> Result<()> {
+/// Return atoms in bottom layer which contains `bottom_atom`
+fn process_bottom_layer(layers: &mut Vec<Molecule>, bottom_atom: usize) -> Vec<usize> {
+    let i = layers
+        .iter()
+        .position(|mol| contains_atom(mol, bottom_atom))
+        .expect("no layer for bottom atom");
+    let mol = layers.remove(i);
+    mol.atoms().map(|(_, a)| a.label().parse().unwrap()).collect()
+}
+// 2378149a ends here
+
+// [[file:../spdkit-surface.note::4299ffbb][4299ffbb]]
+#[track_caller]
+/// Fragment molecule into connected parts by layer for periodic slab model.
+pub fn fragment_atoms_by_layer(mol: &Molecule) -> Result<impl Iterator<Item = Vec<usize>>> {
+    let mut mol = mol.clone();
     ensure!(mol.is_periodic(), "only works for periodic structure!");
 
     // reorder atoms by their zfrac coords
-    let reorder_atoms = reorder_atoms_by_zfrac_coords(mol).unwrap();
+    let reorder_atoms = reorder_atoms_by_zfrac_coords(&mol).unwrap();
 
     // label each atom with its serial number so we can find it when
     // fragmented with this label
@@ -41,24 +56,20 @@ fn fragment_atoms_by_layer(mol: &mut Molecule) -> Result<()> {
     mol.rebond();
     let mut layers = mol.fragmented().collect_vec();
 
-    // find bottom layer
     let mut remained = reorder_atoms.clone();
-    let bottom_atom = remained[0];
-    let bottom_atoms = process_bottom_layer(&mut layers, bottom_atom);
-    // remove atoms in bottom layer
-    remained.retain(|sn| !bottom_atoms.contains(sn));
+    let iter = std::iter::from_fn(move || {
+        // find bottom layer
+        if remained.is_empty() {
+            None
+        } else {
+            let bottom_atom = remained[0];
+            let bottom_atoms = process_bottom_layer(&mut layers, bottom_atom);
+            // remove atoms in bottom layer
+            remained.retain(|sn| !bottom_atoms.contains(sn));
+            Some(bottom_atoms)
+        }
+    });
 
-    Ok(())
+    Ok(iter)
 }
-
-#[track_caller]
-/// Return atoms in bottom layer which contains `bottom_atom`
-fn process_bottom_layer(layers: &mut Vec<Molecule>, bottom_atom: usize) -> Vec<usize> {
-    let i = layers
-        .iter()
-        .position(|mol| contains_atom(mol, bottom_atom))
-        .expect("no layer for bottom atom");
-    let mol = layers.remove(i);
-    mol.atoms().map(|(_, a)| a.label().parse().unwrap()).collect()
-}
-// 2378149a ends here
+// 4299ffbb ends here
