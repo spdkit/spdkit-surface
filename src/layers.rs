@@ -73,3 +73,20 @@ pub fn fragment_atoms_by_layer(mol: &Molecule) -> Result<impl Iterator<Item = Ve
     Ok(iter)
 }
 // 4299ffbb ends here
+
+// [[file:../spdkit-surface.note::9d23e311][9d23e311]]
+#[test]
+fn test_atom_layer() -> Result<()> {
+    let f = "tests/files/R.xsd";
+    let m = Molecule::from_file(f)?;
+    let layers = fragment_atoms_by_layer(&m)?.collect_vec();
+
+    assert!(layers.len() > 4);
+    assert_eq!(layers[0].len(), 24);
+    assert_eq!(layers[1].len(), 27);
+    assert_eq!(layers[2].len(), 24);
+    assert_eq!(layers[3].len(), 12);
+
+    Ok(())
+}
+// 9d23e311 ends here
